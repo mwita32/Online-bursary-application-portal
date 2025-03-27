@@ -12,6 +12,8 @@
      <link rel="stylesheet" href="/static/css/success.css">
     <link rel="stylesheet" href="/static/css/notifications.css">
 
+    <link rel="stylesheet" href="/static/css/contact.css">
+
     <script defer src="/static/js/script.js"></script>
 </head>
 <body>
@@ -34,7 +36,7 @@
             <li><a href="{% url 'student_application' %}"><i class="icon"></i> <span>Application</span></a></li>
             <li><a href="{% url 'notifications' %}"><i class="icon"></i> <span>Notifications</span></a></li>
             <li><a href="#"><i class="icon"></i> <span>Help Desk</span></a></li>
-            <li><a href="#"><i class="icon"></i> <span>Contact Us</span></a></li>
+            <li><a href="{% url 'contact' %}"><i class="icon"></i> <span>Contact Us</span></a></li>
         </ul>
     </div>
 

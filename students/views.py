@@ -8,6 +8,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Notification
 from admins.models import ApplicationSettings
 
+def contact(request):
+    return render(request, 'contact.html')
 
 def student_dashboard(request):
     return render(request, 'dashboard.html')

@@ -8,6 +8,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Notification
 from admins.models import ApplicationSettings
 
+
+def help_view(request):
+    return render(request, 'helpdesk.html')
+
 def contact(request):
     return render(request, 'contact.html')
 

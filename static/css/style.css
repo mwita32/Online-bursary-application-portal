@@ -28,12 +28,13 @@ body {
 .left-section {
     display: flex;
     align-items: center;
+
 }
 .right-section {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding-right: 25px; /* Adjust spacing */
+    padding-right: 25px;
     }
 
 .logo {

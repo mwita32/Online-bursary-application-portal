@@ -15,6 +15,8 @@ from reportlab.platypus import Table, TableStyle
 import os
 
 
+
+
 def admin_homepage(request):
     return render(request,'admin_homepage.html')
 def review_applications(request):
@@ -169,7 +171,7 @@ def allocate_funds(request):
             allocated_amount = max(min(allocated_amount, available_funds), 1000)
 
 
-            # Save allocation
+
             app.approved_amount = allocated_amount
             app.save()
 
@@ -179,10 +181,10 @@ def allocate_funds(request):
             )
 
             total_allocated += allocated_amount
-            available_funds -= total_allocated  # Deduct from available funds
+            available_funds -= total_allocated
 
 
-        fund_settings.total_funds = available_funds  # Ensure correct update
+        fund_settings.total_funds = available_funds
         fund_settings.save()
 
         messages.success(request, f"Funds allocated successfully. Remaining funds: KES {available_funds}.")

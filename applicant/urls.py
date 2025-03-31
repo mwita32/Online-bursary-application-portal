@@ -13,7 +13,7 @@ from .views import (
 
 urlpatterns = [
 
-    path('login/', applicant_login, name='login'),
+    path('', applicant_login, name='login'),
     path('logout/', user_logout, name='logout'),
     path('register/', register, name='register'),
 

@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="notifications-container">
-    <h2>Notifications</h2>
+    <h3>Notifications</h3>
     <ul>
         {% for notification in notifications %}
             <li class="{% if not notification.is_read %}unread{% endif %}">

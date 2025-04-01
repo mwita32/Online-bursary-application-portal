@@ -1,4 +1,3 @@
-/* styles.css */
 body {
     font-family: Arial, sans-serif;
     margin: 40px;
@@ -13,24 +12,15 @@ body {
 }
 h2, h3 {
     color: #fff; /* White text for headings */
-    margin: 20px 0 10px; /* Adjust margin for spacing */
+    margin: 0;
     padding: 10px 15px;
-    background-color: #002060; /* Dark blue background */
+    background-color: #003366; /* Dark blue background */
     border-radius: 5px;
     display: inline-block;
     font-size: 18px;
-    position: relative; /* Necessary for the pseudo-element */
 }
-h2::after, h3::after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 4px;
-    background-color: #007BFF; /* Blue underline */
-    border-radius: 2px;
-    position: absolute;
-    bottom: -4px;
-    left: 0;
+h2 {
+    margin-top: 20px;
 }
 .instructions {
     font-size: 14px;
@@ -93,7 +83,7 @@ button:hover {
 }
 a {
     text-decoration: none;
-    color: #007BFF;
+    color: #3cb371;
 }
 a:hover {
     text-decoration: underline;

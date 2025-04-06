@@ -145,7 +145,7 @@ def register(request):
 
 
 #  User Registration (With Email Activation)
-def registers(request):
+def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -153,34 +153,36 @@ def registers(request):
             user.is_active = False  # Account will be activated after email confirmation
             user.is_applicant = True  # Mark as applicant
             user.save()
+
+            # Generate email activation details
+            current_site = get_current_site(request)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            activation_link = f"{request.scheme}://{current_site.domain}/activate/{uid}/{token}/"
+
+            mail_subject = "Activate Your Account"
+            message = render_to_string('email_verification.html', {
+                'user': user,
+                'activation_link': activation_link
+            })
+
+            try:
+                email_message = EmailMessage(mail_subject, message, to=[user.email])
+                email_message.content_subtype = "html"
+                email_message.send(fail_silently=False)
+                messages.success(request, "Check your email to verify your account.")
+            except Exception as e:
+                messages.error(request, f"Email sending failed: {e}")
+
+            return redirect('login')
         else:
-            print(form.errors)  # Debugging: Print form errors
-
-        current_site = get_current_site(request)
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = default_token_generator.make_token(user)
-        activation_link = f"{request.scheme}://{current_site.domain}/activate/{uid}/{token}/"
-
-        mail_subject = "Activate Your Account"
-        message = render_to_string('email_verification.html', {
-            'user': user,
-            'activation_link': activation_link
-        })
-
-        try:
-            email_message = EmailMessage(mail_subject, message, to=[user.email])
-            email_message.content_subtype = "html"
-            email_message.send(fail_silently=False)
-            messages.success(request, "Check your email to verify your account.")
-        except Exception as e:
-            messages.error(request, f"Email sending failed: {e}")
-
-        return redirect('login')
+            print("Form Errors:", form.errors)  # Debugging: Print form errors
 
     else:
         form = RegistrationForm()
 
     return render(request, 'register.html', {'form': form})
+
 
 #  Email Verification View
 def activate_account(request, uidb64, token):

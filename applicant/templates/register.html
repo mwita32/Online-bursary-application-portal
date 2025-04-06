@@ -4,8 +4,6 @@
 {% block content %}
 <style>
     .bg-image {
-
-        background-size: cover;
         height: 100vh;
         display: flex;
         align-items: center;
@@ -29,53 +27,88 @@
         <form method="post">
             {% csrf_token %}
 
-            <!-- Bootstrap Alerts for Messages (Only Once After Title) -->
-            {% if messages %}
-            <div id="alert-container" class="mt-2">
-                {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <!-- Global error messages -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
                 </div>
-                {% endfor %}
-            </div>
             {% endif %}
 
+            <!-- Django messages (success/failure notifications) -->
+            {% if messages %}
+                <div id="alert-container" class="mt-2">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Registration Number -->
             <div class="mb-3">
                 <label for="regNumber" class="form-label">Registration Number</label>
-                <input type="text" class="form-control" id="regNumber" placeholder="SIT/B/01-XXXXX/2022"
-                       name="reg_number" required pattern="SIT/B/01-\d{5}/\d{4}"
+                <input type="text" class="form-control {% if form.reg_number.errors %}is-invalid{% endif %}"
+                       id="regNumber" placeholder="SIT/B/01-XXXXX/2022" name="reg_number"
+                       value="{{ form.reg_number.value|default_if_none:'' }}"
+                       required pattern="SIT/B/01-\d{5}/\d{4}"
                        title="Format: SIT/B/01-XXXXX/YYYY (e.g., SIT/B/01-55559/2022)">
+                {% for error in form.reg_number.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
             </div>
 
+            <!-- Email -->
             <div class="mb-3">
                 <label for="email" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="email" placeholder="User-Email" name="email" required>
+                <input type="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                       id="email" placeholder="User-Email" name="email"
+                       value="{{ form.email.value|default_if_none:'' }}" required>
+                {% for error in form.email.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
             </div>
 
+            <!-- Full Name -->
             <div class="mb-3">
                 <label for="fullName" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="fullName" placeholder="Full Name" name="full_name" required>
+                <input type="text" class="form-control {% if form.full_name.errors %}is-invalid{% endif %}"
+                       id="fullName" placeholder="Full Name" name="full_name"
+                       value="{{ form.full_name.value|default_if_none:'' }}" required>
+                {% for error in form.full_name.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
             </div>
 
+            <!-- Password -->
             <div class="mb-3">
                 <label for="password" class="form-label">Create Password</label>
                 <div class="input-group">
-                    <input type="password" class="form-control" id="password" placeholder="Create New Password" name="password1" required>
+                    <input type="password" class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
+                           id="password" placeholder="Create New Password" name="password1" required>
                     <span class="input-group-text">
                         <input type="checkbox" id="togglePassword"> Show
                     </span>
                 </div>
+                {% for error in form.password1.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
             </div>
 
+            <!-- Confirm Password -->
             <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Confirm Password</label>
                 <div class="input-group">
-                    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" name="password2" required>
+                    <input type="password" class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+                           id="confirmPassword" placeholder="Confirm Password" name="password2" required>
                     <span class="input-group-text">
                         <input type="checkbox" id="toggleConfirmPassword"> Show
                     </span>
                 </div>
+                {% for error in form.password2.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Register</button>
@@ -89,16 +122,14 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Auto-fade alert messages after 3 seconds
         setTimeout(function () {
             document.querySelectorAll(".alert").forEach(function(alert) {
                 alert.classList.add("fade-out");
-                setTimeout(() => alert.remove(), 500); // Remove after fade out
+                setTimeout(() => alert.remove(), 500);
             });
         }, 3000);
     });
 
-    // Show/Hide Password Functionality
     document.getElementById("togglePassword").addEventListener("change", function() {
         let passwordField = document.getElementById("password");
         passwordField.type = this.checked ? "text" : "password";
